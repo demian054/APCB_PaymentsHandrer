@@ -26,7 +26,7 @@ public class APCBPaymentsHandrerServices {
     private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(APCBPaymentsHandrerServices.class);
     private Gson gson = new Gson();
 
-    @WebMethod(operationName = "completePay")
+    @WebMethod(operationName = "createPay")
     public String createPay(@WebParam(name = "strRequest") String strRequest) {
         log.info("APCBPaymentsHandrerServices -> createPay ini");
         Response response = new Response();

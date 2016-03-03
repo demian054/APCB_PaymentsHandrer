@@ -12,8 +12,7 @@ import com.apcb.utils.entities.Message;
 import com.apcb.utils.entities.Request;
 import com.apcb.utils.entities.Response;
 import com.apcb.utils.enums.RequestMethodEnum;
-import com.apcb.utils.paymentHandler.entities.PayMainRequest;
-import com.apcb.utils.paymentHandler.entities.PayMainResponse;
+import com.apcb.utils.paymentHandler.entities.APCB_PayMain;
 import com.apcb.utils.ticketsHandler.enums.MessagesTypeEnum;
 import com.google.gson.Gson;
 
@@ -27,7 +26,7 @@ public class APCBPaymentsHandrerProcess {
 
     public Response createPay(Request request) {
         Response response = new Response();
-        PayMainRequest payMainRequest = request.getPayMainRequest();
+        APCB_PayMain payMainRequest = request.getPayMainInfo();
         if (payMainRequest==null){            
             response.setMessage(new Message(MessagesTypeEnum.ErrorValidate_ObjectPayMain));
             return response;
@@ -35,7 +34,7 @@ public class APCBPaymentsHandrerProcess {
         InstaPago_Conection instaPago_Conection;
         try {
             instaPago_Conection = new InstaPago_Conection();
-            PayMainResponse instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Payment,RequestMethodEnum.Post);
+            APCB_PayMain instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Payment,RequestMethodEnum.Post);
             log.debug(new Gson().toJson(instaPagoMainResponse)); 
         } catch (Exception e) {
             response.setMessage(new Message(MessagesTypeEnum.ErrorAccessExt_IntaPago));
@@ -46,7 +45,7 @@ public class APCBPaymentsHandrerProcess {
 
     public Response completePay(Request request) {
         Response response = new Response();
-        PayMainRequest payMainRequest = request.getPayMainRequest();
+        APCB_PayMain payMainRequest = request.getPayMainInfo();
         if (payMainRequest==null){            
             response.setMessage(new Message(MessagesTypeEnum.ErrorValidate_ObjectPayMain));
             return response;
@@ -54,7 +53,7 @@ public class APCBPaymentsHandrerProcess {
         InstaPago_Conection instaPago_Conection;
         try {
             instaPago_Conection = new InstaPago_Conection();
-            PayMainResponse instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Complete,RequestMethodEnum.Post);
+            APCB_PayMain instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Complete,RequestMethodEnum.Post);
             log.debug(new Gson().toJson(instaPagoMainResponse)); 
         } catch (Exception e) {
             response.setMessage(new Message(MessagesTypeEnum.ErrorAccessExt_IntaPago));
@@ -64,7 +63,7 @@ public class APCBPaymentsHandrerProcess {
 
     public Response consultPay(Request request) {
                 Response response = new Response();
-        PayMainRequest payMainRequest = request.getPayMainRequest();
+        APCB_PayMain payMainRequest = request.getPayMainInfo();
         if (payMainRequest==null){            
             response.setMessage(new Message(MessagesTypeEnum.ErrorValidate_ObjectPayMain));
             return response;
@@ -72,7 +71,7 @@ public class APCBPaymentsHandrerProcess {
         InstaPago_Conection instaPago_Conection;
         try {
             instaPago_Conection = new InstaPago_Conection();
-            PayMainResponse instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Payment,RequestMethodEnum.Get);
+            APCB_PayMain instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Payment,RequestMethodEnum.Get);
             log.debug(new Gson().toJson(instaPagoMainResponse)); 
         } catch (Exception e) {
             response.setMessage(new Message(MessagesTypeEnum.ErrorAccessExt_IntaPago));
@@ -83,7 +82,7 @@ public class APCBPaymentsHandrerProcess {
 
     public Response annularPay(Request request) {
         Response response = new Response();
-        PayMainRequest payMainRequest = request.getPayMainRequest();
+        APCB_PayMain payMainRequest = request.getPayMainInfo();
         if (payMainRequest==null){            
             response.setMessage(new Message(MessagesTypeEnum.ErrorValidate_ObjectPayMain));
             return response;
@@ -91,7 +90,7 @@ public class APCBPaymentsHandrerProcess {
         InstaPago_Conection instaPago_Conection;
         try {
             instaPago_Conection = new InstaPago_Conection();
-            PayMainResponse instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Payment,RequestMethodEnum.Delete);
+            APCB_PayMain instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Payment,RequestMethodEnum.Delete);
             log.debug(new Gson().toJson(instaPagoMainResponse)); 
         } catch (Exception e) {
             response.setMessage(new Message(MessagesTypeEnum.ErrorAccessExt_IntaPago));
