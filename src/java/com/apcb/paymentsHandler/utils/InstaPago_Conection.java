@@ -11,8 +11,10 @@ import com.apcb.utils.paymentHandler.entities.APCB_PayMain;
 import com.apcb.utils.paymentHandler.enums.StatusIdEnum;
 import com.apcb.utils.conection.ConectionHttpsURL;
 import com.apcb.utils.enums.RequestMethodEnum;
+import com.apcb.utils.utils.DateParser;
 import com.apcb.utils.utils.PropertiesReader;
 import com.google.gson.Gson;
+import java.util.Calendar;
 import org.apache.log4j.Logger;
 
 
@@ -27,6 +29,9 @@ public class InstaPago_Conection {
         
         prop.setProperty("Method", actionMethod.getDescription());
 
+        Calendar ExpirationDate = DateParser.fromDateSring(instaPagoMainRequest.getExpirationDate(), prop, "ExpirationDateCardFormatIN" );
+        instaPagoMainRequest.setExpirationDate(DateParser.toDateSring(ExpirationDate, prop, "ExpirationDateCardFormatOUT"));
+        
         log.info(instaPagoMainRequest.toString());
         ConectionHttpsURL con = new ConectionHttpsURL(prop);
         String InstaPagoResp = con.send(instaPagoMainRequest.toString(), requestMethod);
@@ -47,7 +52,11 @@ public class InstaPago_Conection {
         instaPagoMainRequest.setCardHolderID(1);
         instaPagoMainRequest.setCardNumber(new Long("4111111111111111"));
         instaPagoMainRequest.setCVC(new Integer("123"));
+        
+
         instaPagoMainRequest.setExpirationDate("10/2020");
+        
+        
         instaPagoMainRequest.setStatusId(StatusIdEnum.Pagar);
         instaPagoMainRequest.setIP("192.168.1.108");
         
