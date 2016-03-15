@@ -12,29 +12,39 @@ import com.apcb.utils.entities.Request;
 import com.apcb.utils.entities.Response;
 import com.apcb.utils.ticketsHandler.enums.MessagesTypeEnum;
 import com.google.gson.Gson;
+import java.io.PrintWriter;
+import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
-import javax.jws.WebService;
 
 /**
  *
  * @author Demian
  */
-@WebService(serviceName = "APCBPaymentsHandrerServices")
-public class APCBPaymentsHandrerServices {
- 
-    private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(APCBPaymentsHandrerServices.class);
+@WebService(serviceName = "PaymentsHandlerServices")
+public class PaymentsHandlerServices {
+   private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(PaymentsHandlerServices.class);
     private Gson gson = new Gson();
 
     @WebMethod(operationName = "createPay")
     public String createPay(@WebParam(name = "strRequest") String strRequest) {
         log.info("APCBPaymentsHandrerServices -> createPay ini");
-        Response response = new Response();
+        Request request = new Request(strRequest); 
+        Response response;
         try {
-            Request payMainRequest = new Request(strRequest); 
             APCBPaymentsHandrerProcess process = new APCBPaymentsHandrerProcess();
-            response = process.createPay(payMainRequest);
+            response = process.createPay(request);
+            if (response.getMessage().getMsgCode().equals("200")){
+                try {
+                    PrintWriter writer = new PrintWriter("voucher.html", "UTF-8");
+                    writer.println(response.getPayMainInfo().getVoucher());
+                } catch(Exception e) {
+                    log.error("Cant write Voucher File");
+                    throw new Exception();
+                }
+            }
         } catch (Exception e) {
+            response = new Response(request.getSesionId());
             response.setMessage(new Message(MessagesTypeEnum.Error_AplicationErrorNotHandler));
             log.error(response.getMessage().getMsgDesc(), e);
         }
@@ -45,12 +55,22 @@ public class APCBPaymentsHandrerServices {
     @WebMethod(operationName = "completePay")
     public String completePay(@WebParam(name = "strRequest") String strRequest) {
         log.info("APCBPaymentsHandrerServices -> completePay ini");
-        Response response = new Response();
+        Request request = new Request(strRequest); 
+        Response response;
         try {
-            Request payMainRequest = new Request(strRequest); 
             APCBPaymentsHandrerProcess process = new APCBPaymentsHandrerProcess();
-            response = process.completePay(payMainRequest);
+            response = process.completePay(request);
+            if (response.getMessage().getMsgCode().equals("200")){
+                try {
+                    PrintWriter writer = new PrintWriter("voucher2.html", "UTF-8");
+                    writer.println(response.getPayMainInfo().getVoucher());
+                } catch(Exception e) {
+                    log.error("Cant write Voucher File");
+                    throw new Exception();
+                }
+            }
         } catch (Exception e) {
+            response = new Response(request.getSesionId());
             response.setMessage(new Message(MessagesTypeEnum.Error_AplicationErrorNotHandler));
             log.error(response.getMessage().getMsgDesc(), e);
         }
@@ -61,12 +81,13 @@ public class APCBPaymentsHandrerServices {
     @WebMethod(operationName = "consultPay")
     public String consultPay(@WebParam(name = "strRequest") String strRequest) {
         log.info("APCBPaymentsHandrerServices -> consultPay ini");
-        Response response = new Response();
+        Request request = new Request(strRequest); 
+        Response response;
         try {
-            Request payMainRequest = new Request(strRequest); 
             APCBPaymentsHandrerProcess process = new APCBPaymentsHandrerProcess();
-            response = process.consultPay(payMainRequest);
+            response = process.consultPay(request);
         } catch (Exception e) {
+            response = new Response(request.getSesionId());
             response.setMessage(new Message(MessagesTypeEnum.Error_AplicationErrorNotHandler));
             log.error(response.getMessage().getMsgDesc(), e);
         }
@@ -77,12 +98,13 @@ public class APCBPaymentsHandrerServices {
     @WebMethod(operationName = "annularPay")
     public String annularPay(@WebParam(name = "strRequest") String strRequest) {
         log.info("APCBPaymentsHandrerServices -> annularPay ini");
-        Response response = new Response();
-        try {
-            Request payMainRequest = new Request(strRequest); 
+        Request request = new Request(strRequest); 
+        Response response;
+        try { 
             APCBPaymentsHandrerProcess process = new APCBPaymentsHandrerProcess();
-            response = process.annularPay(payMainRequest);
+            response = process.annularPay(request);
         } catch (Exception e) {
+            response = new Response(request.getSesionId());
             response.setMessage(new Message(MessagesTypeEnum.Error_AplicationErrorNotHandler));
             log.error(response.getMessage().getMsgDesc(), e);
         }
