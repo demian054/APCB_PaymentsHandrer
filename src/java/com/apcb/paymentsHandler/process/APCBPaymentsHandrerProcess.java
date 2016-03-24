@@ -39,13 +39,13 @@ public class APCBPaymentsHandrerProcess {
             instaPago_Conection = new InstaPago_Conection();
             APCB_PayMain instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Payment,RequestMethodEnum.Post);
             log.debug(new Gson().toJson(instaPagoMainResponse)); 
-            if (!instaPagoMainResponse.isSuccess()){
-                response.setMessage(new Message(instaPagoMainResponse.getCode(),instaPagoMainResponse.getMessage()));
-                log.error(response.getMessage().getMsgDesc());
-                return response;
+            if (instaPagoMainResponse.isSuccess() && instaPagoMainResponse.getMessage().equalsIgnoreCase("201")){
+                response.setMessage(new Message(MessagesTypeEnum.Ok));
             }
             response.setPayMainInfo(instaPagoMainResponse);
             response.setTravelInfo(request.getTravelInfo());
+            log.info(response.getMessage().getMsgDesc());
+           
         } catch (Exception e) {
             response.setMessage(new Message(MessagesTypeEnum.ErrorAccessExt_IntaPago));
             return response;
