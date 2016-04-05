@@ -16,6 +16,8 @@ import java.io.PrintWriter;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -23,7 +25,7 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "PaymentsHandlerServices")
 public class PaymentsHandlerServices {
-   private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(PaymentsHandlerServices.class);
+    private Logger log = LogManager.getLogger(PaymentsHandlerServices.class);
     private Gson gson = new Gson();
 
     @WebMethod(operationName = "createPay")

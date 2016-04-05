@@ -16,11 +16,12 @@ import com.apcb.utils.utils.PdfCreator;
 import com.apcb.utils.utils.PropertiesReader;
 import com.google.gson.Gson;
 import java.util.Calendar;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class InstaPago_Conection {
-    private final static Logger log = Logger.getLogger(InstaPago_Conection.class);
+    private Logger log = LogManager.getLogger(InstaPago_Conection.class);
     
     public APCB_PayMain post(APCB_PayMain instaPagoMainRequest, ActionMethodEnum actionMethod, RequestMethodEnum requestMethod) throws Exception{
         PropertiesReader prop = new PropertiesReader("InstaPagoConnection");
@@ -62,6 +63,7 @@ public class InstaPago_Conection {
     private APCB_PayMain merge(APCB_PayMain payMainRQ, APCB_PayMain payMainRS){
         payMainRQ.setSuccess(payMainRS.isSuccess());
         payMainRQ.setMessage(payMainRS.getMessage());
+        payMainRQ.setCode(payMainRS.getCode());
         payMainRQ.setId(payMainRS.getId());
         payMainRQ.setReference(payMainRS.getReference());
         payMainRQ.setVoucher(payMainRS.getVoucher());

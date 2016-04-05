@@ -16,14 +16,16 @@ import com.apcb.utils.paymentHandler.entities.APCB_PayMain;
 import com.apcb.utils.paymentHandler.enums.StatusIdEnum;
 import com.apcb.utils.ticketsHandler.enums.MessagesTypeEnum;
 import com.google.gson.Gson;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  *
  * @author Demian
  */
 public class APCBPaymentsHandrerProcess {
-    private Logger log = Logger.getLogger(APCBPaymentsHandrerProcess.class);
+    private Logger log = LogManager.getLogger(APCBPaymentsHandrerProcess.class);
     private Gson gson = new Gson();
 
     public Response createPay(Request request) {
@@ -34,13 +36,18 @@ public class APCBPaymentsHandrerProcess {
             response.setMessage(new Message(MessagesTypeEnum.ErrorValidate_ObjectPayMain));
             return response;
         }
+        payMainRequest.setOrderNumber(Integer.valueOf(request.getTravelInfo().getTransactionId()));
+        payMainRequest.setDescription(payMainRequest.getDescription()+" "+request.getTravelInfo().getTransactionId());
         InstaPago_Conection instaPago_Conection;
         try {
             instaPago_Conection = new InstaPago_Conection();
             APCB_PayMain instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Payment,RequestMethodEnum.Post);
             log.debug(new Gson().toJson(instaPagoMainResponse)); 
-            if (instaPagoMainResponse.isSuccess() && instaPagoMainResponse.getMessage().equalsIgnoreCase("201")){
+            if (instaPagoMainResponse.isSuccess() && instaPagoMainResponse.getCode().equalsIgnoreCase("201")){
                 response.setMessage(new Message(MessagesTypeEnum.Ok));
+            } else {
+                response.setMessage(new Message(instaPagoMainResponse.getCode(), instaPagoMainResponse.getMessage()));
+                log.error("IntaPago ERROR, code:"+instaPagoMainResponse.getCode()+ " message:"+ instaPagoMainResponse.getMessage());
             }
             response.setPayMainInfo(instaPagoMainResponse);
             response.setTravelInfo(request.getTravelInfo());
@@ -61,14 +68,17 @@ public class APCBPaymentsHandrerProcess {
             return response;
         }
         InstaPago_Conection instaPago_Conection;
+        payMainRequest.setOrderNumber(Integer.valueOf(request.getTravelInfo().getTransactionId()));
+        payMainRequest.setDescription(payMainRequest.getDescription()+" "+request.getTravelInfo().getTransactionId());
         try {
             instaPago_Conection = new InstaPago_Conection();
             APCB_PayMain instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Complete,RequestMethodEnum.Post);
             log.debug(new Gson().toJson(instaPagoMainResponse)); 
-            if (!instaPagoMainResponse.isSuccess()){
-                response.setMessage(new Message(instaPagoMainResponse.getCode(),instaPagoMainResponse.getMessage()));
-                log.error(response.getMessage().getMsgDesc());
-                return response;
+            if (instaPagoMainResponse.isSuccess() && instaPagoMainResponse.getCode().equalsIgnoreCase("201")){
+                response.setMessage(new Message(MessagesTypeEnum.Ok));
+            } else {
+                response.setMessage(new Message(instaPagoMainResponse.getCode(), instaPagoMainResponse.getMessage()));
+                log.error("IntaPago ERROR, code:"+instaPagoMainResponse.getCode()+ " message:"+ instaPagoMainResponse.getMessage());
             }
             response.setPayMainInfo(instaPagoMainResponse);
             response.setTravelInfo(request.getTravelInfo());
@@ -86,14 +96,17 @@ public class APCBPaymentsHandrerProcess {
             return response;
         }
         InstaPago_Conection instaPago_Conection;
+        payMainRequest.setOrderNumber(Integer.valueOf(request.getTravelInfo().getTransactionId()));
+        payMainRequest.setDescription(payMainRequest.getDescription()+" "+request.getTravelInfo().getTransactionId());
         try {
             instaPago_Conection = new InstaPago_Conection();
             APCB_PayMain instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Payment,RequestMethodEnum.Get);
             log.debug(new Gson().toJson(instaPagoMainResponse));
-            if (!instaPagoMainResponse.isSuccess()){
-                response.setMessage(new Message(instaPagoMainResponse.getCode(),instaPagoMainResponse.getMessage()));
-                log.error(response.getMessage().getMsgDesc());
-                return response;
+            if (instaPagoMainResponse.isSuccess() && instaPagoMainResponse.getCode().equalsIgnoreCase("201")){
+                response.setMessage(new Message(MessagesTypeEnum.Ok));
+            } else {
+                response.setMessage(new Message(instaPagoMainResponse.getCode(), instaPagoMainResponse.getMessage()));
+                log.error("IntaPago ERROR, code:"+instaPagoMainResponse.getCode()+ " message:"+ instaPagoMainResponse.getMessage());
             }
             response.setPayMainInfo(instaPagoMainResponse);
             response.setTravelInfo(request.getTravelInfo());
@@ -112,14 +125,17 @@ public class APCBPaymentsHandrerProcess {
             return response;
         }
         InstaPago_Conection instaPago_Conection;
+        payMainRequest.setOrderNumber(Integer.valueOf(request.getTravelInfo().getTransactionId()));
+        payMainRequest.setDescription(payMainRequest.getDescription()+" "+request.getTravelInfo().getTransactionId());
         try {
             instaPago_Conection = new InstaPago_Conection();
             APCB_PayMain instaPagoMainResponse = instaPago_Conection.post(payMainRequest,ActionMethodEnum.Payment,RequestMethodEnum.Delete);
             log.debug(new Gson().toJson(instaPagoMainResponse)); 
-            if (!instaPagoMainResponse.isSuccess()){
-                response.setMessage(new Message(instaPagoMainResponse.getCode(),instaPagoMainResponse.getMessage()));
-                log.error(response.getMessage().getMsgDesc());
-                return response;
+            if (instaPagoMainResponse.isSuccess() && instaPagoMainResponse.getCode().equalsIgnoreCase("201")){
+                response.setMessage(new Message(MessagesTypeEnum.Ok));
+            } else {
+                response.setMessage(new Message(instaPagoMainResponse.getCode(), instaPagoMainResponse.getMessage()));
+                log.error("IntaPago ERROR, code:"+instaPagoMainResponse.getCode()+ " message:"+ instaPagoMainResponse.getMessage());
             }
             response.setPayMainInfo(instaPagoMainResponse);
             response.setTravelInfo(request.getTravelInfo());
